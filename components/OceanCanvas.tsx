@@ -1,5 +1,6 @@
 'use client'
 
+import { DisplacementFilter } from "@pixi/filter-displacement"
 import gsap from "gsap"
 import { Application, Assets, Graphics, Sprite } from "pixi.js"
 import { useEffect, useRef } from "react"
@@ -13,7 +14,7 @@ export default function OceanCanvas({ bottles, onBottleOpen }: any) {
             backgroundAlpha: 0,
             resizeTo: ref.current!,
             preference: 'webgl'
-        }).then(() => {
+        }).then(async () => {
             ref.current!.appendChild(app.canvas)
 
             const ocean = new Graphics()
@@ -21,8 +22,26 @@ export default function OceanCanvas({ bottles, onBottleOpen }: any) {
             ocean.fill({ color: 0x003355 })
             app.stage.addChild(ocean)
 
+            const dispTex = await Assets.load('/noice.png')
+            const dispSprite = new Sprite(dispTex)
+            dispSprite.texture.baseTexture.wrapMode = 'repeat'
+
+            const filter = new DisplacementFilter(dispSprite)
+            ocean.filters= [filter]
+            app.stage.addChild(dispSprite)
+
+            gsap.to(filter.scale, {
+                x: 20,
+                y: 30,
+                duration: 4,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut'
+            })
+
+
             bottles.forEach(async (bottle: any) => {
-                const tex = await Assets.load('/bottle.png')
+                const tex = await Assets.load('/bottle.webp')
                 const sprite = new Sprite(tex)
 
                 sprite.anchor.set(.5)
@@ -54,7 +73,7 @@ export default function OceanCanvas({ bottles, onBottleOpen }: any) {
         <div 
             ref={ref}
             style={{width: '100vw', height: '50vh', overflow: 'hidden'}}
-            
+
         />
     )
 }
