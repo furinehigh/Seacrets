@@ -27,6 +27,4 @@ export default function BottleSendAnimation({bottleSprite, onDone}: any) {
     }, [])
 
     return null
-
-    
 }

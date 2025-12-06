@@ -24,7 +24,7 @@ export default function AncientTextWriter({text}: {text: string}) {
     }, [text])
 
     return (
-        <p className='font-ancient whitespace-pre-wrap text-[22px] leading-8'>
+        <p className='font-pirate whitespace-pre-wrap text-[22px] leading-8'>
             {shown}
         </p>
     )

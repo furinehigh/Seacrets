@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 const scribble = new Howl({src: ['/scribble2.mp3'], volume: .15})
 
-export default function AncientTextWriter({onSubmit}: any) {
+export default function AncientWriterInput({onSubmit}: any) {
     const [value, setValue] = useState('')
     const [shown, setShown] = useState('')
 
@@ -21,7 +21,7 @@ export default function AncientTextWriter({onSubmit}: any) {
     }
 
     return (
-        <div className='bg-[#F6E7C9] border-[#7A5C3D] border-2 p-6 h-[50vh] rounded-xl overflow-auto font-ancient text-lg relative'>
+        <div className='bg-[#F6E7C9] border-[#7A5C3D] border-2 p-6 h-[50vh] rounded-xl overflow-auto font-pirate text-lg relative'>
             <p>{shown}</p>
             <textarea name="letter" id="letter" value={value} onChange={type} 
                 className='absolute inset-0 opacity-0 pointer-events-none'
