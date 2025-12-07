@@ -12,6 +12,16 @@ I wanted to build something fun, so i created Seacrets for everyone to share the
 - Redis to store Seacrets for faster read n write
 - Google fonts
 
+# Features
+- User can write, seal and cast away their secrets easily
+- Users can read anyones secrets 
+- Writing and reading of secrets are filled with animations and sound effects
+- Large depth sea to hold large number of bottles easily
+- Bottle gets filled with sand and hence gets sinked in the water
+- All the data are stored on Redis directly to provide crazy fast read and write speeds
+- Users can share any secret with an URL
+
+
 # Installation
 First create a `.env` file with `REDIS_URL` env variable.
 1. Clone the repo
