@@ -2,7 +2,7 @@
 
 import OceanCanvas from "@/components/OceanCanvas";
 import AncientWriterInput from "@/components/AncientWriterInput";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import LetterModal from "@/components/LetterModal";
 import { useSearchParams } from "next/navigation";
 
@@ -12,7 +12,7 @@ export type Bottle = {
   createdAt: number;
 }
 
-export default function Home() {
+function Home() {
   const search = useSearchParams()
   const seacretId = search.get('seacretId')
   const [bottles, setBottles] = useState<Bottle[]>([])
@@ -81,4 +81,12 @@ export default function Home() {
       )}
     </main>
   );
+}
+
+export default function AppHome(){
+  return (
+    <Suspense>
+      <Home />
+    </Suspense>
+  )
 }
