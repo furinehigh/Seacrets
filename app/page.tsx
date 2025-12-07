@@ -4,6 +4,7 @@ import OceanCanvas from "@/components/OceanCanvas";
 import AncientWriterInput from "@/components/AncientWriterInput";
 import { useEffect, useState } from "react";
 import LetterModal from "@/components/LetterModal";
+import { useSearchParams } from "next/navigation";
 
 export type Bottle = {
   id: string;
@@ -12,6 +13,8 @@ export type Bottle = {
 }
 
 export default function Home() {
+  const search = useSearchParams()
+  const seacretId = search.get('seacretId')
   const [bottles, setBottles] = useState<Bottle[]>([])
 
   const [openedBottle, setOpenedBottle] = useState<Bottle | null>(null)
@@ -19,7 +22,7 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
-      const res= await fetch('/api/letters')
+      const res = await fetch('/api/letters')
 
       const items = await res.json()
 
@@ -27,9 +30,15 @@ export default function Home() {
     })()
   }, [])
 
+  useEffect(() => {
+    if (seacretId || seacretId !== '') {
+      openBottle(bottles?.filter(b => b.id == seacretId)[0])
+    }
+  }, [seacretId])
+
   const openBottle = (bottle: Bottle) => {
     // You can use your existing LetterModal here
-    setOpenedBottle(bottle) 
+    setOpenedBottle(bottle)
   }
 
   const handleLetterSubmit = async (text: string) => {
@@ -54,16 +63,16 @@ export default function Home() {
 
   return (
     <main>
-      <OceanCanvas 
-        bottles={bottles} 
-        onBottleOpen={openBottle} 
-        onStartWriting={() => setIsWriting(true)} 
+      <OceanCanvas
+        bottles={bottles}
+        onBottleOpen={openBottle}
+        onStartWriting={() => setIsWriting(true)}
       />
 
       {isWriting && (
-        <AncientWriterInput 
-            onSubmit={handleLetterSubmit} 
-            onClose={() => setIsWriting(false)} 
+        <AncientWriterInput
+          onSubmit={handleLetterSubmit}
+          onClose={() => setIsWriting(false)}
         />
       )}
 

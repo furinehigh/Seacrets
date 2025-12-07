@@ -374,7 +374,7 @@ export default function OceanCanvas({ bottles, onBottleOpen, onStartWriting }: {
           </div>
           <div className="relative flex items-center gap-3 text-[#78350f] font-bold text-xl z-10">
              <Feather className="w-6 h-6 animate-pulse" />
-             <span>Write a Letter</span>
+             <span>Write a Seacret</span>
           </div>
         </div>
       </motion.button>

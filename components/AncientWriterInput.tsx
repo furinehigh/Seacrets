@@ -123,15 +123,15 @@ export default function AncientBottleMessage({ onSubmit, onClose }: { onSubmit: 
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.8, opacity: 0, transition: { duration: 0.5 } }}
-                            className="relative w-[600px] h-[850px]"
+                            className="relative w-[600px] h-[850px] overflow-hidden"
                         >
-                            <button onClick={onClose} className="absolute -top-12 right-0 text-white/80 hover:text-white transition-colors">
+                            <button onClick={onClose} className="fixed top-12 right-42 text-white/80 hover:text-white transition-colors">
                                 <X size={32} />
                             </button>
 
                             <div
                                 ref={textContainerRef}
-                                className="relative w-full h-full"
+                                className="relative w-full h-full overflow-hidden"
                                 style={{
                                     backgroundImage: `url(${ASSETS.paperTexture})`,
                                     backgroundSize: '100% 100%',
@@ -147,21 +147,21 @@ export default function AncientBottleMessage({ onSubmit, onClose }: { onSubmit: 
                                 />
 
                                 <div className="absolute inset-0 w-full h-full px-20 py-36 z-0 whitespace-pre-wrap break-words font-handwriting text-4xl font-semibold leading-relaxed text-[#3e2723]">
-                                    {text}
+                                    {text}<span ref={endMarkerRef}></span>
                                 </div>
 
                                 <div
                                     ref={mirrorRef}
-                                    className="absolute inset-0 w-full h-full px-13 py-8 -z-10 whitespace-pre-wrap break-words font-handwriting text-4xl leading-relaxed opacity-0 pointer-events-none"
+                                    className="absolute inset-0 w-full h-full px-14 py-5 -z-10 whitespace-pre-wrap break-words font-handwriting text-4xl leading-relaxed opacity-0 pointer-events-none"
                                 >
-                                    {text}<span ref={endMarkerRef}>|</span>
+                                    {text}
                                 </div>
 
                                 <motion.div
                                     className="absolute z-20 pointer-events-none origin-bottom-left"
                                     animate={{
-                                        x: quillPos.x + 40,
-                                        y: quillPos.y + 40,
+                                        x: quillPos.x + 13,
+                                        y: quillPos.y - 80,
                                     }}
                                     transition={{ type: "tween", ease: "linear", duration: 0.05 }}
                                 >
