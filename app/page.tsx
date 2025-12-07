@@ -27,8 +27,8 @@ function Home() {
       const items = await res.json()
       
       if (seacretId && items.length > 0) {
-        openBottle(items?.filter(b => b.id == seacretId)[0])
-        console.log(seacretId, items?.filter(b => b.id == seacretId)[0])
+        openBottle(items?.filter((b: any) => b.id == seacretId)[0])
+        console.log(seacretId, items?.filter((b: any) => b.id == seacretId)[0])
       }
       setBottles(items)
     })()

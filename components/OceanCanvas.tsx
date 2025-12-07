@@ -6,7 +6,6 @@ import { Volume2, VolumeX, Feather } from 'lucide-react'
 import { Howl } from 'howler' // <--- IMPORT HOWLER
 import { Bottle as BottleType } from '@/app/page'
 
-// ... (Keep VisualBottle type definitions) ...
 type VisualBottle = BottleType & {
   yOffset: number
   scale: number
@@ -20,7 +19,6 @@ type VisualBottle = BottleType & {
   rotationStrength: number
 }
 
-// ... (Keep useSound hook for short SFX like bubbles/clicks - it's fine for those) ...
 const useSound = (src: string, volume: number = 0.5) => {
     const audioRef = useRef<HTMLAudioElement | null>(null)
   
@@ -39,7 +37,6 @@ const useSound = (src: string, volume: number = 0.5) => {
     return play
 }
 
-// ... (Keep Bubbles, Fish, Seaweed, and Bottle components exactly as they were) ...
 const Bubbles = ({ isHovered }: { isHovered: boolean }) => (
     <AnimatePresence>
       {isHovered &&
@@ -181,12 +178,12 @@ const Bottle = ({ data, onClick, playBubble }: { data: VisualBottle; onClick: ()
           height: `${140 * data.scale}px`,
           zIndex: data.isSinking ? 20 : 50,
         }}
-        variants={xVariant}
+        variants={xVariant as any}
         animate="animate"
       >
         <motion.div
           className="w-full h-full cursor-pointer group relative"
-          variants={physicsVariant}
+          variants={physicsVariant as any}
           animate="animate"
           whileHover={{ transition: { duration: 0.3 } }}
           onHoverStart={handleHover}
@@ -328,7 +325,7 @@ export default function OceanCanvas({ bottles, onBottleOpen, onStartWriting }: {
         rotationStrength: (Math.random() * 30) - 15
       }
     })
-    setVisualBottles(processed)
+    setVisualBottles(processed as any)
   }, [bottles])
 
   return (
