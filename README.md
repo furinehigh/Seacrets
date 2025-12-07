@@ -1,3 +1,4 @@
+<img width="1426" height="607" alt="Screenshot 2025-12-07 at 11 03 22 PM" src="https://github.com/user-attachments/assets/5aea7c71-e833-4f04-b0a6-a0a5239aeab0" />
 # Seacrets
 A sea where your secrets are anonymous and globally available to be ready by anyone sealed in a bottle...
 
