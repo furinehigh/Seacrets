@@ -1,6 +1,9 @@
 import redis from "@/lib/redis";
 import { NextRequest, NextResponse } from "next/server";
 
+const LIMIT = 5
+const WINDOW = 60
+
 export async function POST(req: NextRequest) {
   try {
     const { letter, id, createdAt } = await req.json();
@@ -12,6 +15,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const forwarded = req.headers.get('x-forwarded-for')
+    const ip = forwarded?.split(",")[0] || 'unknown'
+
+    const key = `rate:${ip}`
+    const count = await redis.incr(key)
+
+    if (count === 1){
+        await redis.expire(key, WINDOW)
+    }
+
+    if (count > LIMIT){
+        return NextResponse.json({error: "Slow down sailor (limit reached)"}, {status: 429})
+    }
+
+    
     await redis.set(
       `letter:${id}`,
       JSON.stringify({ letter, createdAt })

@@ -38,14 +38,14 @@ export default function Home() {
       letter: text,
       createdAt: Date.now()
     }
+    setBottles(prev => [...prev, newBottle])
+    setIsWriting(false) // Close the writer overlay
 
     await fetch('/api/add-letter', {
       method: 'POST',
       body: JSON.stringify(newBottle)
     })
 
-    setBottles(prev => [...prev, newBottle])
-    setIsWriting(false) // Close the writer overlay
   }
 
   const closeLetterModal = () => {

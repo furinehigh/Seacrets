@@ -65,7 +65,7 @@ export default function AncientBottleMessage({ onSubmit, onClose }: { onSubmit: 
 
     // --- ANIMATION SEQUENCE ---
     const startSequence = () => {
-        if (!text.trim()) return
+        if (!text.trim() || text.length < 5) return
 
         // 1. Roll the paper
         sounds.paper.play()
