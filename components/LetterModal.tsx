@@ -61,7 +61,7 @@ export default function LetterModal({ text, onClose, id }: LetterModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex justify-center items-center font-serif">
+    <div className="fixed inset-0 z-100 flex justify-center items-center font-serif">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Ruthie&display=swap');
         .font-handwriting { font-family: 'Ruthie', cursive; }

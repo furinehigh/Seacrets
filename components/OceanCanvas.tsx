@@ -274,8 +274,7 @@ export default function OceanCanvas({ bottles, onBottleOpen, onStartWriting }: {
         bgMusicRef.current = new Howl({
             src: ['/sounds/ocean.wav'],
             loop: true,
-            volume: 0.1,
-            // html5: false is default and important for gapless looping
+            volume: 0.1
         })
     }
 

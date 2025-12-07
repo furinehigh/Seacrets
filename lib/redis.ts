@@ -8,7 +8,7 @@ if (!global.__redis) {
         url: process.env.REDIS_URL
     })
 
-    redis.connect().catch(err => console.error('Redis is mad >', err))
+    redis.connect().catch(err => console.error('Redis is mad -_-', err))
 
     global.__redis = redis
 } else {

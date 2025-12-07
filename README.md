@@ -1,4 +1,8 @@
 <img width="1426" height="607" alt="Screenshot 2025-12-07 at 11 03 22 PM" src="https://github.com/user-attachments/assets/5aea7c71-e833-4f04-b0a6-a0a5239aeab0" />
+<img src="https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white" />
+<img src="https://img.shields.io/badge/next%20js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" />
+
+
 # Seacrets
 A sea where your secrets are anonymous and globally available to be ready by anyone sealed in a bottle...
 
