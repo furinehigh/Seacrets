@@ -77,7 +77,7 @@ function Home() {
       )}
 
       {openedBottle && !isWriting && (
-        <LetterModal text={openedBottle.letter} onClose={closeLetterModal} />
+        <LetterModal text={openedBottle.letter} onClose={closeLetterModal} id={openedBottle.id} />
       )}
     </main>
   );

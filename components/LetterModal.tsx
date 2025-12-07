@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Howl } from 'howler'
-import { X, MailOpen } from 'lucide-react'
+import { X, MailOpen, Share, Copy, Check } from 'lucide-react'
 
 // --- SOUND CONFIGURATION ---
 const sounds = {
@@ -22,10 +22,12 @@ const ASSETS = {
 interface LetterModalProps {
   text: string
   onClose: () => void
+  id: string
 }
 
-export default function LetterModal({ text, onClose }: LetterModalProps) {
+export default function LetterModal({ text, onClose, id }: LetterModalProps) {
   const [stage, setStage] = useState<'floating' | 'uncorking' | 'extracting' | 'reading'>('floating')
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     sounds.splash.play()
@@ -48,6 +50,14 @@ export default function LetterModal({ text, onClose }: LetterModalProps) {
         setStage('reading')
       }, 1000)
     }, 600)
+  }
+
+  const handleLetterLinkCopy = () => {
+    setCopied(true)
+    navigator.clipboard.writeText(`https://seacrets.vercel.app?seacretId=${id}`)
+    setTimeout(() => {
+      setCopied(false)
+    }, 1000)
   }
 
   return (
@@ -219,7 +229,24 @@ export default function LetterModal({ text, onClose }: LetterModalProps) {
                     </div>
                   </motion.div>
                 </div>
+                <motion.button
+                  initial={{ y: 50, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  disabled={copied}
+                  onClick={handleLetterLinkCopy}
+                  className="fixed bottom-20 left-1/2 -translate-x-1/2 px-8 py-3 bg-[#4a3022] text-[#e0c9a6] font-pirate text-xl rounded border-2 border-[#8d6e63] shadow-xl hover:scale-105 transition-transform z-50"
+                >
+                  {copied ? <div className='flex items-center'>
+                    <Check className='mr-2' />
+                    Link copied
+                  </div> : <div className='flex items-center'>
+                    <Copy className='mr-2' />
+                    Copy Seacret's link
+                  </div>}
+                </motion.button>
               </motion.div>
+
+
             )}
           </AnimatePresence>
 
