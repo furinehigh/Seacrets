@@ -263,7 +263,7 @@ const Bottle = ({ data, onClick, playBubble }: { data: VisualBottle; onClick: ()
             <path d="M15,70 L15,100" stroke="rgba(255,255,255,0.8)" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
   
             {/* Cork */}
-            <rect x="21" y="-6" width="38" height="14" rx="2" fill="#5c4033" stroke="#3e2723" strokeWidth="1" />
+            <rect x="26" y="-6" width="28" height="24" rx="2" fill="#5c4033" stroke="#3e2723" strokeWidth="1" />
           </svg>
         </motion.div>
       </motion.div>
@@ -280,7 +280,7 @@ export default function OceanCanvas({ bottles, onBottleOpen, onStartWriting }: {
   const [isMuted, setIsMuted] = useState(true)
   
   const bgMusicRef = useRef<HTMLAudioElement | null>(null)
-  const playBubble = useSound('/sounds/bubble.mp3', 0.4)
+  const playBubble = useSound('/sounds/bubble.mp3', 0.2)
   const playClick = useSound('/sounds/wood-click.mp3', 0.6)
 
   const toggleMute = () => {
@@ -295,7 +295,7 @@ export default function OceanCanvas({ bottles, onBottleOpen, onStartWriting }: {
     } else {
       bgMusicRef.current = new Audio('/sounds/ocean.wav')
       bgMusicRef.current.loop = true
-      bgMusicRef.current.volume = 0.2
+      bgMusicRef.current.volume = 0.1
       if(isMuted) bgMusicRef.current.play()
     }
   }

@@ -3,6 +3,7 @@
 import OceanCanvas from "@/components/OceanCanvas";
 import AncientWriterInput from "@/components/AncientWriterInput";
 import { useState } from "react";
+import LetterModal from "@/components/LetterModal";
 
 export type Bottle = {
   id: string;
@@ -22,8 +23,7 @@ export default function Home() {
 
   const openBottle = (bottle: Bottle) => {
     // You can use your existing LetterModal here
-    alert(`Message from the deep: ${bottle.letter}`); 
-    // setOpenedBottle(bottle) 
+    setOpenedBottle(bottle) 
   }
 
   const handleLetterSubmit = (text: string) => {
@@ -34,6 +34,10 @@ export default function Home() {
     }
     setBottles(prev => [...prev, newBottle])
     setIsWriting(false) // Close the writer overlay
+  }
+
+  const closeLetterModal = () => {
+    setOpenedBottle(null)
   }
 
   return (
@@ -49,6 +53,10 @@ export default function Home() {
             onSubmit={handleLetterSubmit} 
             onClose={() => setIsWriting(false)} 
         />
+      )}
+
+      {openedBottle && !isWriting && (
+        <LetterModal text={openedBottle.letter} onClose={closeLetterModal} />
       )}
     </main>
   );

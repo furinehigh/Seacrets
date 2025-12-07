@@ -14,12 +14,11 @@ const sounds = {
 }
 
 // --- ASSETS ---
-// I have updated the paperTexture to represent the Scroll Image you provided.
-// Please ensure the image is saved in your public folder as 'scroll-bg.png' or update the path.
 const ASSETS = {
-  paperTexture: "/scroll-bg.png", // <--- Make sure your image is named this
+  paperTexture: "/scroll-bg.png", 
   quillImage: "/quill.png", 
-  bottleTexture: "rgba(255, 255, 255, 0.2)"
+  bottleTexture: "rgba(255, 255, 255, 0.2)",
+  closedPaper: "/closed-paper.png"
 }
 
 export default function AncientBottleMessage({ onSubmit, onClose }: { onSubmit: (text: string) => void, onClose: () => void }) {
@@ -68,7 +67,7 @@ export default function AncientBottleMessage({ onSubmit, onClose }: { onSubmit: 
   const startSequence = () => {
     if (!text.trim()) return
 
-    // 1. Roll the paper (Top and Bottom come together)
+    // 1. Roll the paper
     sounds.paper.play()
     setStage('rolling')
 
@@ -119,7 +118,6 @@ export default function AncientBottleMessage({ onSubmit, onClose }: { onSubmit: 
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0, transition: { duration: 0.5 } }}
-              // Adjusted dimensions to match the scroll aspect ratio
               className="relative w-[600px] h-[850px]"
             >
               <button onClick={onClose} className="absolute -top-12 right-0 text-white/80 hover:text-white transition-colors">
@@ -135,10 +133,6 @@ export default function AncientBottleMessage({ onSubmit, onClose }: { onSubmit: 
                   backgroundRepeat: 'no-repeat'
                 }}
               >
-                {/* 
-                   ADDED PADDING: 
-                   Top/Bottom padding (py-32) ensures text doesn't write over the curled edges 
-                */}
                 <textarea
                   value={text}
                   onChange={handleChange}
@@ -153,7 +147,7 @@ export default function AncientBottleMessage({ onSubmit, onClose }: { onSubmit: 
 
                 <div 
                    ref={mirrorRef}
-                   className="absolute inset-0 w-full h-full px-20 py-36 -z-10 whitespace-pre-wrap break-words font-handwriting text-4xl leading-relaxed opacity-0 pointer-events-none"
+                   className="absolute inset-0 w-full h-full px-13 py-8 -z-10 whitespace-pre-wrap break-words font-handwriting text-4xl leading-relaxed opacity-0 pointer-events-none"
                 >
                   {text}<span ref={endMarkerRef}>|</span>
                 </div>
@@ -185,7 +179,7 @@ export default function AncientBottleMessage({ onSubmit, onClose }: { onSubmit: 
                   initial={{ y: 50, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   onClick={startSequence}
-                  className="absolute -bottom-24 left-1/2 -translate-x-1/2 px-8 py-3 bg-[#4a3022] text-[#e0c9a6] font-handwriting text-3xl rounded border-2 border-[#8d6e63] shadow-xl hover:scale-105 transition-transform z-50"
+                  className="fixed bottom-24 left-1/2 -translate-x-1/2 px-8 py-3 bg-[#4a3022] text-[#e0c9a6] font-handwriting text-3xl rounded border-2 border-[#8d6e63] shadow-xl hover:scale-105 transition-transform z-50"
                 >
                   Seal & Cast Away
                 </motion.button>
@@ -199,42 +193,64 @@ export default function AncientBottleMessage({ onSubmit, onClose }: { onSubmit: 
               
               <AnimatePresence>
                 {stage !== 'dropping' && (
-                  <motion.div
-                    key="scroll-object"
-                    className="absolute z-20 bg-transparent"
-                    style={{ 
-                      backgroundImage: `url(${ASSETS.paperTexture})`,
-                      backgroundSize: '100% 100%'
-                    }}
-                    // --- CHANGED ANIMATION LOGIC ---
-                    // 1. Initial: Full size scroll
-                    initial={{ width: 600, height: 850, rotate: 0, opacity: 1, scale: 1 }}
-                    animate={
-                      stage === 'rolling' 
-                      ? { 
-                          // Squashes height (Top and Bottom meet)
-                          height: 120, 
-                          width: 600,
-                          // No rotation yet, just rolling up
-                          rotate: 0,
-                        } 
-                      : (stage === 'bottling' || stage === 'corking')
-                      ? { 
-                          // Keeps the rolled shape
-                          height: 120, 
-                          width: 600,
-                          // ROTATE 90deg to fit vertically in bottle
-                          rotate: 90, 
-                          // SCALE DOWN to fit inside bottle width
-                          scale: 0.15, 
-                          // Move into position
-                          y: 80 
-                        } 
-                      : {}
-                    }
-                    transition={{ duration: 1.5, ease: "easeInOut" }}
-                  >
-                  </motion.div>
+                  <>
+                    {/* 1. The Open Paper Squeezes and Fades Out */}
+                    <motion.div
+                      key="open-scroll-transition"
+                      className="absolute z-20 bg-transparent"
+                      style={{ 
+                        backgroundImage: `url(${ASSETS.paperTexture})`,
+                        backgroundSize: '100% 100%'
+                      }}
+                      initial={{ width: 600, height: 850, opacity: 1 }}
+                      animate={
+                        stage === 'rolling' 
+                        ? { 
+                            height: 400, // Squeeze effect
+                            width: 500,
+                            opacity: 0,
+                            scale: 0.8
+                          } 
+                        : { opacity: 0 } // Stay hidden in later stages
+                      }
+                      transition={{ duration: 0.8, ease: "easeInOut" }}
+                    />
+
+                    {/* 2. The Closed Scroll Appears and Moves into Bottle */}
+                    <motion.div
+                      key="closed-scroll-transition"
+                      className="absolute z-20 bg-transparent"
+                      style={{ 
+                        backgroundImage: `url(${ASSETS.closedPaper})`,
+                        backgroundSize: '100% 100%'
+                      }}
+                      initial={{ width: 100, height: 250, opacity: 0, scale: 0.5 }}
+                      animate={
+                         stage === 'rolling'
+                         ? { 
+                             opacity: 1, 
+                             scale: 1.2, // Show nicely in center
+                             y: 0 
+                           }
+                         : (stage === 'bottling' || stage === 'corking')
+                         ? {
+                             // Match dimensions of the static scroll inside bottle
+                             width: 50, 
+                             height: 180,
+                             opacity: 1,
+                             scale: 1,
+                             y: 80, // Move down into bottle
+                             rotate: 0 
+                           }
+                         : {}
+                      }
+                      transition={{ 
+                         duration: stage === 'rolling' ? 0.8 : 1.2, 
+                         delay: stage === 'rolling' ? 0.4 : 0, // Wait for squeeze before appearing
+                         ease: "easeInOut" 
+                      }}
+                    />
+                  </>
                 )}
               </AnimatePresence>
 
@@ -266,24 +282,22 @@ export default function AncientBottleMessage({ onSubmit, onClose }: { onSubmit: 
                       <path d="M85,150 L85,260" stroke="rgba(255,255,255,0.1)" strokeWidth="2" strokeLinecap="round" />
                     </svg>
 
-                    {/* Scroll Inside Bottle (Static view after animation) */}
-                    {(stage === 'corking' || stage === 'dropping') && (
+                    {/* Scroll Inside Bottle (Shown when dropping to ensure it stays with bottle) */}
+                    {stage === 'dropping' && (
                        <motion.div 
                          initial={{ opacity: 0 }}
                          animate={{ opacity: 1 }}
-                         // This visually replaces the animated scroll once it's inside
-                         className="absolute top-[130px] left-[70px] w-[50px] h-[180px] rounded-sm"
+                         className="absolute top-[230px] left-[70px] w-[50px] h-[180px] rounded-sm blur-[2px]"
                          style={{ 
-                           backgroundImage: `url(${ASSETS.paperTexture})`,
-                           backgroundSize: '100% 100%', // Squashed texture look
-                           boxShadow: 'inset 0 0 10px rgba(0,0,0,0.5)'
+                           backgroundImage: `url(${ASSETS.closedPaper})`,
+                           backgroundSize: '100% 100%',
                          }}
                        />
                     )}
 
                     {/* The Cork */}
                     <motion.div
-                       className="absolute -top-10 left-[35%] w-[30%]"
+                       className="absolute -top-10 left-[37%] w-[32%]"
                        initial={{ y: -100, opacity: 0 }}
                        animate={
                          stage === 'corking' || stage === 'dropping'
