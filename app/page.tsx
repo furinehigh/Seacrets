@@ -31,7 +31,7 @@ function Home() {
   }, [])
   
   useEffect(() => {
-    if (seacretId || seacretId !== '') {
+    if (seacretId && bottles.length > 0) {
       openBottle(bottles?.filter(b => b.id == seacretId)[0])
       console.log(seacretId, bottles?.filter(b => b.id == seacretId)[0])
     }
