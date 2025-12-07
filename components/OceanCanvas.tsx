@@ -3,9 +3,10 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Volume2, VolumeX, Feather } from 'lucide-react'
+import { Howl } from 'howler' // <--- IMPORT HOWLER
 import { Bottle as BottleType } from '@/app/page'
 
-// ... (Keep VisualBottle type and useSound hook from previous code) ...
+// ... (Keep VisualBottle type definitions) ...
 type VisualBottle = BottleType & {
   yOffset: number
   scale: number
@@ -19,6 +20,7 @@ type VisualBottle = BottleType & {
   rotationStrength: number
 }
 
+// ... (Keep useSound hook for short SFX like bubbles/clicks - it's fine for those) ...
 const useSound = (src: string, volume: number = 0.5) => {
     const audioRef = useRef<HTMLAudioElement | null>(null)
   
@@ -37,7 +39,7 @@ const useSound = (src: string, volume: number = 0.5) => {
     return play
 }
 
-// ... (Keep Bubbles component) ...
+// ... (Keep Bubbles, Fish, Seaweed, and Bottle components exactly as they were) ...
 const Bubbles = ({ isHovered }: { isHovered: boolean }) => (
     <AnimatePresence>
       {isHovered &&
@@ -71,14 +73,13 @@ const Bubbles = ({ isHovered }: { isHovered: boolean }) => (
           />
         ))}
     </AnimatePresence>
-  )
+)
 
-// --- FIX: Fish Orientation ---
 const Fish = () => {
   const depth = Math.random() * 3000 + 500
   const duration = 20 + Math.random() * 30
   const delay = Math.random() * -50
-  const isRight = Math.random() > 0.5 // Direction logic
+  const isRight = Math.random() > 0.5 
 
   return (
     <motion.div
@@ -88,14 +89,9 @@ const Fish = () => {
       animate={{ x: isRight ? '120vw' : '-20vw' }}
       transition={{ duration, repeat: Infinity, ease: 'linear', delay }}
     >
-      {/* 
-         Transform logic: 
-         If swimming Right (isRight=true), we want scaleX(1).
-         If swimming Left (isRight=false), we want scaleX(-1) to flip the SVG.
-      */}
       <svg 
         width="60" height="30" viewBox="0 0 60 30" 
-        style={{ transform: isRight ? 'scaleX(1)' : 'scaleX(-1)' }} // FIXED
+        style={{ transform: isRight ? 'scaleX(1)' : 'scaleX(-1)' }}
       >
         <path d="M55,15 Q40,0 20,5 Q0,10 0,15 Q0,20 20,25 Q40,30 55,15 Z M55,15 L60,5 M55,15 L60,25" fill="#475569" />
         <circle cx="45" cy="12" r="1.5" fill="white" />
@@ -105,24 +101,20 @@ const Fish = () => {
   )
 }
 
-// --- FIX: Seaweed Anchoring ---
 const Seaweed = ({ side, depth, scale }: { side: 'left' | 'right', depth: number, scale: number }) => {
   return (
     <div 
       className="absolute pointer-events-none opacity-50 z-10"
       style={{ 
-        left: side === 'left' ? 0 : 'auto',   // Anchored specifically to sides
+        left: side === 'left' ? 0 : 'auto', 
         right: side === 'right' ? 0 : 'auto', 
         top: depth, 
-        transform: `scale(${scale}) ${side === 'right' ? 'scaleX(-1)' : ''}`, // Flip for right side
+        transform: `scale(${scale}) ${side === 'right' ? 'scaleX(-1)' : ''}`, 
         filter: 'blur(0.5px)'
       }}
     >
       <svg width="100" height="300" viewBox="0 0 100 300" style={{ overflow: 'visible' }}>
-        {/* The Rock Base - so it's not floating */}
         <path d="M-20,280 Q10,260 50,280 T100,300 L-20,300 Z" fill="#334155" />
-        
-        {/* Plants */}
         <path 
           d="M20,280 Q-10,200 20,150 T20,0" 
           fill="none" 
@@ -144,11 +136,9 @@ const Seaweed = ({ side, depth, scale }: { side: 'left' | 'right', depth: number
   )
 }
 
-// ... (Keep Bottle component exactly as before, it was good) ...
 const Bottle = ({ data, onClick, playBubble }: { data: VisualBottle; onClick: () => void, playBubble: () => void }) => {
     const [isHovered, setIsHovered] = useState(false)
   
-    // 1. Horizontal Movement
     const xVariant = {
       animate: {
         x: data.direction === 'right' ? ['-20vw', '120vw'] : ['120vw', '-20vw'],
@@ -161,7 +151,6 @@ const Bottle = ({ data, onClick, playBubble }: { data: VisualBottle; onClick: ()
       }
     }
   
-    // 2. Vertical/Rotation Physics
     const physicsVariant = {
       animate: {
         y: data.isSinking ? [0, -30, 0, 30, 0] : [0, -15, 0], 
@@ -222,7 +211,6 @@ const Bottle = ({ data, onClick, playBubble }: { data: VisualBottle; onClick: ()
               </linearGradient>
             </defs>
   
-            {/* Back Glass */}
             <path
               d="M20,0 L60,0 L60,50 Q75,60 75,100 L75,180 Q75,200 40,200 Q5,200 5,180 L5,100 Q5,60 20,50 Z"
               fill="rgba(0,0,0,0.05)"
@@ -230,7 +218,6 @@ const Bottle = ({ data, onClick, playBubble }: { data: VisualBottle; onClick: ()
               strokeWidth="1.5"
             />
   
-            {/* Sand */}
             {data.sandLevel > 0 && (
               <path
                 d={`M6,${198 - data.sandLevel * 50} 
@@ -241,7 +228,6 @@ const Bottle = ({ data, onClick, playBubble }: { data: VisualBottle; onClick: ()
               />
             )}
   
-            {/* Letter Inside */}
             <g transform={`translate(25, ${120 - (data.sandLevel * 30)}) rotate(${data.isSinking ? 20 : -5})`}>
                <rect x="0" y="0" width="30" height="70" rx="2" fill={`url(#scrollGrad-${data.id})`} />
                <line x1="5" y1="10" x2="25" y2="10" stroke="#78350f" strokeWidth="1" opacity="0.3" />
@@ -250,7 +236,6 @@ const Bottle = ({ data, onClick, playBubble }: { data: VisualBottle; onClick: ()
                <rect x="0" y="32" width="30" height="6" fill="#991b1b" opacity="0.5" />
             </g>
   
-            {/* Front Glass */}
             <path
               d="M20,0 L60,0 L60,50 Q75,60 75,100 L75,180 Q75,200 40,200 Q5,200 5,180 L5,100 Q5,60 20,50 Z"
               fill={`url(#glassGrad-${data.id})`}
@@ -258,17 +243,15 @@ const Bottle = ({ data, onClick, playBubble }: { data: VisualBottle; onClick: ()
               style={{ mixBlendMode: 'multiply' }}
             />
             
-            {/* Shine */}
             <path d="M65,70 L65,170" stroke="rgba(255,255,255,0.8)" strokeWidth="4" strokeLinecap="round" opacity="0.6" />
             <path d="M15,70 L15,100" stroke="rgba(255,255,255,0.8)" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
   
-            {/* Cork */}
             <rect x="26" y="-6" width="28" height="24" rx="2" fill="#5c4033" stroke="#3e2723" strokeWidth="1" />
           </svg>
         </motion.div>
       </motion.div>
     )
-  }
+}
 
 // --- Main Canvas ---
 export default function OceanCanvas({ bottles, onBottleOpen, onStartWriting }: { bottles: BottleType[], onBottleOpen: (b: BottleType) => void, onStartWriting?: () => void }) {
@@ -279,26 +262,47 @@ export default function OceanCanvas({ bottles, onBottleOpen, onStartWriting }: {
   const [visualBottles, setVisualBottles] = useState<VisualBottle[]>([])
   const [isMuted, setIsMuted] = useState(true)
   
-  const bgMusicRef = useRef<HTMLAudioElement | null>(null)
+  // --- UPDATED MUSIC REFERENCE ---
+  const bgMusicRef = useRef<Howl | null>(null)
+  
   const playBubble = useSound('/sounds/bubble.mp3', 0.2)
-  const playClick = useSound('/sounds/wood-click.mp3', 0.6)
+  const playClick = useSound('/sounds/letter-open.mp3', 0.6)
 
+  // --- UPDATED TOGGLE MUTE LOGIC ---
   const toggleMute = () => {
     setIsMuted(!isMuted)
-    if (bgMusicRef.current) {
-      if (isMuted) {
-         bgMusicRef.current.play().catch(() => console.log('Interact first'))
-         bgMusicRef.current.volume = 0.2
-      } else {
-         bgMusicRef.current.pause()
-      }
+    
+    // Initialize sound if it doesn't exist
+    if (!bgMusicRef.current) {
+        bgMusicRef.current = new Howl({
+            src: ['/sounds/ocean.wav'],
+            loop: true,
+            volume: 0.1,
+            // html5: false is default and important for gapless looping
+        })
+    }
+
+    if (isMuted) {
+         // User is Unmuting
+         bgMusicRef.current.play()
+         bgMusicRef.current.fade(0, 0.1, 1500) // Smooth fade in
     } else {
-      bgMusicRef.current = new Audio('/sounds/ocean.wav')
-      bgMusicRef.current.loop = true
-      bgMusicRef.current.volume = 0.1
-      if(isMuted) bgMusicRef.current.play()
+         // User is Muting
+         bgMusicRef.current.fade(0.1, 0, 500) // Smooth fade out
+         setTimeout(() => {
+             bgMusicRef.current?.pause()
+         }, 500)
     }
   }
+
+  // --- CLEANUP ON UNMOUNT ---
+  useEffect(() => {
+      return () => {
+          if (bgMusicRef.current) {
+              bgMusicRef.current.unload()
+          }
+      }
+  }, [])
 
   useEffect(() => {
     const oceanDepth = Math.max(2000, bottles.length * 150) 
