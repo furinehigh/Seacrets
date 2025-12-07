@@ -16,23 +16,24 @@ function Home() {
   const search = useSearchParams()
   const seacretId = search.get('seacretId')
   const [bottles, setBottles] = useState<Bottle[]>([])
-
+  
   const [openedBottle, setOpenedBottle] = useState<Bottle | null>(null)
   const [isWriting, setIsWriting] = useState(false)
-
+  
   useEffect(() => {
     (async () => {
       const res = await fetch('/api/letters')
-
+      
       const items = await res.json()
-
+      
       setBottles(items)
     })()
   }, [])
-
+  
   useEffect(() => {
     if (seacretId || seacretId !== '') {
       openBottle(bottles?.filter(b => b.id == seacretId)[0])
+      console.log(seacretId, bottles?.filter(b => b.id == seacretId)[0])
     }
   }, [seacretId])
 
