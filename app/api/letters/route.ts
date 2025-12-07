@@ -15,7 +15,7 @@ export async function GET() {
         const data = JSON.parse(x)
         return {
             id: keys[i].replace('letter:', ''),
-            letter: data.text,
+            letter: data.letter,
             createdAt: data.createdAt
         }
     })

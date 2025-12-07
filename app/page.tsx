@@ -1,4 +1,4 @@
-('use client'
+'use client'
 
 import OceanCanvas from "@/components/OceanCanvas";
 import AncientWriterInput from "@/components/AncientWriterInput";
@@ -24,8 +24,8 @@ export default function Home() {
       const items = await res.json()
 
       setBottles(items)
-    })
-  })
+    })()
+  }, [])
 
   const openBottle = (bottle: Bottle) => {
     // You can use your existing LetterModal here
@@ -72,4 +72,4 @@ export default function Home() {
       )}
     </main>
   );
-})
+}
