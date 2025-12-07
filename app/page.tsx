@@ -35,7 +35,7 @@ function Home() {
       openBottle(bottles?.filter(b => b.id == seacretId)[0])
       console.log(seacretId, bottles?.filter(b => b.id == seacretId)[0])
     }
-  }, [seacretId])
+  }, [])
 
   const openBottle = (bottle: Bottle) => {
     // You can use your existing LetterModal here
