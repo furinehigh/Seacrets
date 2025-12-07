@@ -15,8 +15,8 @@ const sounds = {
 
 // --- ASSETS ---
 const ASSETS = {
-  paperTexture: "/scroll-bg.png",
-  closedPaper: "/closed-paper.png"
+  paperTexture: "https://i.api.dishis.tech/i/iU71U8",
+  closedPaper: "/closed-paper.webp"
 }
 
 interface LetterModalProps {

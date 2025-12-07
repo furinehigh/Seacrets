@@ -15,10 +15,10 @@ const sounds = {
 
 // --- ASSETS ---
 const ASSETS = {
-    paperTexture: "/scroll-bg.png",
+    paperTexture: "https://i.api.dishis.tech/i/iU71U8",
     quillImage: "/quill.png",
     bottleTexture: "rgba(255, 255, 255, 0.2)",
-    closedPaper: "/closed-paper.png"
+    closedPaper: "/closed-paper.webp"
 }
 
 export default function AncientBottleMessage({ onSubmit, onClose }: { onSubmit: (text: string) => void, onClose: () => void }) {
